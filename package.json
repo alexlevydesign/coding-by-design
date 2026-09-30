@@ -1,0 +1,46 @@
+{
+  "name": "coding-by-design",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.3.1",
+    "@fortawesome/free-solid-svg-icons": "^7.3.1",
+    "@fortawesome/react-fontawesome": "^3.5.0",
+    "next": "16.3.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-a11y": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1",
+    "@storybook/addon-mcp": "^10.6.1",
+    "@storybook/addon-vitest": "^10.6.1",
+    "@storybook/nextjs-vite": "^10.6.1",
+    "@vitest/browser-playwright": "latest",
+    "@vitest/coverage-v8": "latest",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.7",
+    "eslint-plugin-storybook": "^10.6.1",
+    "mockdate": "^3.0.5",
+    "msw": "^2.15.0",
+    "msw-storybook-addon": "^3.0.3",
+    "playwright": "latest",
+    "storybook": "^10.6.1",
+    "vite": "latest",
+    "vitest": "latest"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}
