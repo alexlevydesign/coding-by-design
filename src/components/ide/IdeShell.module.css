@@ -1,0 +1,265 @@
+.page {
+  min-height: 100svh;
+  padding: 0.75rem 0.8125rem 0;
+  background: var(--color-background);
+  color: var(--color-gray-00);
+}
+
+.header {
+  height: 2.25rem;
+  padding-left: 0.8125rem;
+}
+
+.logo {
+  color: var(--color-gray-00);
+  font-style: italic;
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 1fr);
+  gap: 0.8125rem;
+  height: calc(100svh - 3rem);
+}
+
+.editorPanel,
+.previewPanel {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 0.1875rem;
+}
+
+.editorPanel {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  grid-template-rows: 2.0625rem minmax(0, 1fr);
+  background: var(--color-gray-100);
+}
+
+.editorToolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  grid-column: 1;
+  grid-row: 1;
+  border-bottom: 0.0625rem solid var(--color-gray-80);
+  background: var(--color-gray-100);
+}
+
+.iconButton,
+.expandButton,
+.folder,
+.fileRow {
+  border: 0;
+  color: inherit;
+  text-align: left;
+}
+
+.iconButton,
+.expandButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.iconButton {
+  width: 2.25rem;
+  height: 2.0625rem;
+  color: var(--color-gray-00);
+  font-size: 0.875rem;
+}
+
+.addButton {
+  margin-left: auto;
+  margin-right: 0.3125rem;
+}
+
+.fileBrowser {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  padding: 1.5625rem 0.8125rem;
+  border-right: 0.0625rem solid var(--color-gray-80);
+  background: var(--color-gray-100);
+  color: var(--color-gray-20);
+}
+
+.folder,
+.fileRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 1.9375rem;
+  gap: 0.8125rem;
+  background: transparent;
+  color: var(--color-gray-20);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.folder {
+  padding: 0;
+  cursor: pointer;
+}
+
+.folder svg {
+  width: 0.75rem;
+  color: var(--color-gray-00);
+}
+
+.assetFiles {
+  padding: 0.5625rem 0 0.5625rem 1.625rem;
+}
+
+.fileRow {
+  padding: 0 0.3125rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fileRow svg {
+  width: 0.875rem;
+  color: var(--color-gray-20);
+}
+
+.projectFiles .fileRow:hover,
+.selectedFile {
+  background: var(--color-gray-80);
+  color: var(--color-gray-00);
+}
+
+.codeEditor {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  min-width: 0;
+  background: var(--color-gray-100);
+}
+
+.tabs {
+  display: flex;
+  height: 2.0625rem;
+  border-bottom: 0.0625rem solid var(--color-gray-80);
+  background: var(--color-gray-100);
+}
+
+.tab {
+  min-width: 7rem;
+  padding: 0 1rem;
+  background: var(--color-gray-100);
+  color: var(--color-gray-20);
+  cursor: pointer;
+  border: none;
+}
+
+.activeTab {
+  background: var(--color-gray-80);
+  color: var(--color-gray-00);
+}
+
+.expandButton {
+  width: 2rem;
+  height: 2.0625rem;
+  margin-left: auto;
+  color: var(--color-gray-00);
+  font-size: 0.6875rem;
+}
+
+.editorBody {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  height: calc(100% - 2.0625rem);
+  padding-top: 1.5625rem;
+}
+
+.lineNumbers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3125rem;
+  padding-right: 0.8125rem;
+  color: var(--color-gray-20);
+  user-select: none;
+}
+
+.textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: auto;
+  border: 0;
+  outline: 0;
+  padding: 0 0.8125rem 1rem 0;
+  background: transparent;
+  color: var(--color-gray-00);
+  white-space: pre;
+}
+
+.previewPanel {
+  display: grid;
+  grid-template-rows: 2.0625rem minmax(0, 1fr);
+  background: var(--color-gray-00);
+}
+
+.previewToolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 0.0625rem solid var(--color-gray-20);
+  background: var(--color-gray-00);
+}
+
+.previewToolbar .expandButton {
+  color: var(--color-gray-100);
+}
+
+.previewFrame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--color-gray-00);
+}
+
+@media (max-width: 52rem) {
+  .panels {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(28rem, 1fr) minmax(20rem, 0.8fr);
+    height: auto;
+    min-height: calc(100svh - 3rem);
+  }
+
+  .editorPanel {
+    min-height: 28rem;
+  }
+
+  .previewPanel {
+    min-height: 20rem;
+  }
+}
+
+@media (max-width: 34rem) {
+  .page {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .editorPanel {
+    grid-template-columns: 11.5rem minmax(0, 1fr);
+  }
+
+  .fileBrowser {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .assetFiles {
+    padding-left: 1rem;
+  }
+}

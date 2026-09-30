@@ -4,7 +4,6 @@
   align-items: center;
   border-bottom: 0.0625rem solid var(--color-gray-20);
   padding: 0.9375rem 1.25rem;
-  font-family: var(--font-body);
 }
 
 .site-header svg {
@@ -16,10 +15,6 @@
   display: inline-block;
   vertical-align: top;
   margin: 0.375rem 0 0.375rem 0.625rem;
-  font-family: var(--font-body);
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.3;
 }
 
 .site-header button + button {
@@ -29,8 +24,4 @@
 .site-header .welcome {
   margin-right: 0.625rem;
   color: var(--color-gray-100);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1;
 }

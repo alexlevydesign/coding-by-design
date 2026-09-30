@@ -8,6 +8,7 @@
   --color-gray-80: #403d43;
   --color-gray-20: #c9c6cd;
   --color-gray-00: #f7f7f8;
+  --color-background: #000000;
 
   --background: var(--color-gray-00);
   --foreground: var(--color-gray-100);
