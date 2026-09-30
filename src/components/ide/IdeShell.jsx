@@ -19,13 +19,20 @@ const initialFiles = {
   "contact.html": `<h1>Contact</h1>\n\n<p>Let's work together.</p>`,
 };
 
+const initialTabs = ["index.html", "style.css", "contact.html"];
+
 export default function IdeShell() {
   const [files, setFiles] = useState(initialFiles);
+  const [tabs, setTabs] = useState(initialTabs);
   const [activeFile, setActiveFile] = useState("index.html");
 
+  const previewHtml = activeFile.endsWith(".html")
+    ? files[activeFile]
+    : files["index.html"];
+
   const previewDocument = useMemo(
-    () => `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>${files["style.css"]}</style></head><body>${files["index.html"]}</body></html>`,
-    [files],
+    () => `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>${files["style.css"]}</style></head><body>${previewHtml}</body></html>`,
+    [files, previewHtml],
   );
 
   function updateFile(value) {
@@ -54,6 +61,9 @@ export default function IdeShell() {
             activeFile={activeFile}
             value={files[activeFile]}
             onChange={updateFile}
+            onSelect={setActiveFile}
+            tabs={tabs}
+            onReorder={setTabs}
           />
         </section>
 

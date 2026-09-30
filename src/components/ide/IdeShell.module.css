@@ -150,13 +150,33 @@
   background: var(--color-gray-100);
 }
 
+.tabSlot {
+  display: flex;
+  position: relative;
+  min-width: 0;
+}
+
 .tab {
   min-width: 7rem;
   padding: 0 1rem;
   background: var(--color-gray-100);
   color: var(--color-gray-20);
-  cursor: pointer;
+  cursor: grab;
   border: none;
+}
+
+.tab:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0.9;
+}
+
+.dropIndicator {
+  width: 0.125rem;
+  flex: 0 0 0.125rem;
+  background: var(--color-purple-80);
 }
 
 .activeTab {
