@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
   faBars,
+  faFile,
+  faFolderPlus,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import FileBrowser from "./FileBrowser";
 import CodeEditor from "./CodeEditor";
@@ -25,9 +28,13 @@ export default function IdeShell() {
   const [activeFile, setActiveFile] = useState("index.html");
   const [fileBrowserOpen, setFileBrowserOpen] = useState(true);
   const [expandedPanel, setExpandedPanel] = useState(null);
+  const [folders, setFolders] = useState([]);
+  const [folderFiles, setFolderFiles] = useState({});
+  const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
   const [editorRatio, setEditorRatio] = useState(0.62);
   const [isResizing, setIsResizing] = useState(false);
   const panelsRef = useRef(null);
+  const uploadInputRef = useRef(null);
 
   useEffect(() => {
     if (!isResizing) {
@@ -71,6 +78,64 @@ export default function IdeShell() {
     setFiles((currentFiles) => ({ ...currentFiles, [activeFile]: value }));
   }
 
+  function createFile() {
+    const fileName = window.prompt("File name");
+
+    if (!fileName?.trim() || Object.hasOwn(files, fileName.trim())) {
+      return;
+    }
+
+    const name = fileName.trim();
+    setFiles((currentFiles) => ({ ...currentFiles, [name]: "" }));
+    setTabs((currentTabs) => [...currentTabs, name]);
+    setActiveFile(name);
+    setIsAddMenuOpen(false);
+  }
+
+  function createFolder() {
+    const folderName = window.prompt("Folder name");
+
+    if (!folderName?.trim() || folders.includes(folderName.trim())) {
+      return;
+    }
+
+    setFolders((currentFolders) => [...currentFolders, folderName.trim()]);
+    setFolderFiles((currentFolderFiles) => ({ ...currentFolderFiles, [folderName.trim()]: [] }));
+    setIsAddMenuOpen(false);
+  }
+
+  function moveFileToFolder(fileName, folderName) {
+    setFolderFiles((currentFolderFiles) => {
+      const nextFolderFiles = Object.fromEntries(
+        Object.entries(currentFolderFiles).map(([folder, folderContents]) => [
+          folder,
+          folderContents.filter((file) => file !== fileName),
+        ]),
+      );
+
+      if (folderName) {
+        nextFolderFiles[folderName] = [...(nextFolderFiles[folderName] || []), fileName];
+      }
+      return nextFolderFiles;
+    });
+  }
+
+  async function uploadFile(event) {
+    const [file] = event.target.files;
+
+    if (!file) {
+      return;
+    }
+
+    const name = file.name;
+    const contents = await file.text();
+    setFiles((currentFiles) => ({ ...currentFiles, [name]: contents }));
+    setTabs((currentTabs) => currentTabs.includes(name) ? currentTabs : [...currentTabs, name]);
+    setActiveFile(name);
+    setIsAddMenuOpen(false);
+    event.target.value = "";
+  }
+
   function toggleExpandedPanel(panel) {
     setExpandedPanel((currentPanel) => (currentPanel === panel ? null : panel));
   }
@@ -104,11 +169,47 @@ export default function IdeShell() {
               <FontAwesomeIcon icon={faBars} />
             </button>
             <span className={`type-body-bold ${styles.panelTitle}`}>Files</span>
-            <button className={`${styles.iconButton} ${styles.addButton}`} type="button" aria-label="Add file">
+            <button
+              className={`${styles.iconButton} ${styles.addButton}`}
+              type="button"
+              aria-label="Add file"
+              aria-expanded={isAddMenuOpen}
+              onClick={() => setIsAddMenuOpen((isOpen) => !isOpen)}
+            >
               <FontAwesomeIcon icon={faPlus} />
             </button>
+            {isAddMenuOpen && (
+              <div className={styles.addMenu} role="menu" aria-label="Create or upload">
+                <button type="button" role="menuitem" onClick={createFile}>
+                  <FontAwesomeIcon icon={faFile} />
+                  <span>New file</span>
+                </button>
+                <button type="button" role="menuitem" onClick={createFolder}>
+                  <FontAwesomeIcon icon={faFolderPlus} />
+                  <span>New folder</span>
+                </button>
+                <button type="button" role="menuitem" onClick={() => uploadInputRef.current?.click()}>
+                  <FontAwesomeIcon icon={faUpload} />
+                  <span>Upload file</span>
+                </button>
+                <input
+                  ref={uploadInputRef}
+                  className={styles.hiddenInput}
+                  type="file"
+                  onChange={uploadFile}
+                  aria-label="Upload file"
+                />
+              </div>
+            )}
           </div>
-          <FileBrowser activeFile={activeFile} onSelect={setActiveFile} />
+          <FileBrowser
+            activeFile={activeFile}
+            onSelect={setActiveFile}
+            files={Object.keys(files)}
+            folders={folders}
+            folderFiles={folderFiles}
+            onMoveFile={moveFileToFolder}
+          />
           <CodeEditor
             activeFile={activeFile}
             value={files[activeFile]}

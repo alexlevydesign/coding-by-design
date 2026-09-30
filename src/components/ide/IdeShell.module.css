@@ -168,6 +168,50 @@
   margin-right: 0.3125rem;
 }
 
+.addMenu {
+  display: flex;
+  position: absolute;
+  top: 2.375rem;
+  right: 0.5rem;
+  z-index: 3;
+  flex-direction: column;
+  width: 9.5rem;
+  padding: 0.25rem;
+  border: 0.0625rem solid var(--color-gray-80);
+  border-radius: 0.1875rem;
+  background: var(--color-gray-100);
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 25%);
+}
+
+.addMenu button {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-gray-00);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.addMenu button:hover,
+.addMenu button:focus-visible {
+  background: var(--color-gray-80);
+  outline: 0;
+}
+
+.addMenu svg {
+  width: 0.875rem;
+  color: var(--color-purple-60);
+}
+
+.hiddenInput {
+  display: none;
+}
+
 .fileBrowser {
   grid-column: 1;
   grid-row: 2;
@@ -211,6 +255,28 @@
   padding: 0 0.3125rem;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.folderGroup {
+  border: 0.0625rem solid transparent;
+}
+
+.folderGroup.dropTarget {
+  border-color: var(--color-purple-80);
+  background: var(--color-gray-80);
+}
+
+.projectFiles.dropTarget {
+  outline: 0.0625rem dashed var(--color-purple-80);
+  outline-offset: -0.0625rem;
+}
+
+.nestedFiles {
+  padding-left: 1rem;
+}
+
+.nestedFile {
+  padding-left: 0.625rem;
 }
 
 .fileRow svg {
