@@ -296,7 +296,7 @@
   border-radius: .25rem;
 }
 
-.projectFiles .fileRow:hover {
+.projectFiles .fileRow:not(.selectedFile):hover {
     background: var(--color-gray-90);
     color: var(--color-gray-00);
     border-radius: .25rem;
