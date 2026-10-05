@@ -32,6 +32,7 @@
   width: 100%;
   cursor: col-resize;
   touch-action: none;
+  
 }
 
 .resizeHandle::after {
@@ -44,6 +45,7 @@
 .resizeHandle:hover::after,
 .resizing .resizeHandle::after {
   background: var(--color-purple-80);
+  border-radius: 10rem;
 }
 
 .editorExpanded {
