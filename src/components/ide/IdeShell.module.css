@@ -319,7 +319,7 @@
   padding: 0 1rem;
   background: var(--color-gray-100);
   color: var(--color-gray-20);
-  cursor: grab;
+  cursor: pointer;
   border: none;
 }
 
