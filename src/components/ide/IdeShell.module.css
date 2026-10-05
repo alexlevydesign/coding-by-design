@@ -58,7 +58,7 @@
 .previewPanel {
   min-width: 0;
   overflow: hidden;
-  border-radius: 0.1875rem;
+  border-radius: 0.25rem;
   transition: opacity 250ms cubic-bezier(0.8, 0.05, 0.5, 1), visibility 250ms cubic-bezier(0.8, 0.05, 0.5, 1);
 }
 
@@ -185,7 +185,7 @@
   width: 9.5rem;
   padding: 0.25rem;
   border: 0.0625rem solid var(--color-gray-80);
-  border-radius: 0.1875rem;
+  border-radius: 0.25rem;
   background: var(--color-gray-80);
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 25%);
 }

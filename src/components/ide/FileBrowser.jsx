@@ -47,7 +47,7 @@ export default function FileBrowser({ activeFile, onSelect, files, folders, fold
 
   return (
     <nav className={`type-code ${styles.fileBrowser}`} aria-label="Project files">
-      <button className={styles.folder} type="button">
+      {/* <button className={styles.folder} type="button">
         <FontAwesomeIcon icon={faChevronDown} />
         <span>Assets</span>
       </button>
@@ -64,7 +64,7 @@ export default function FileBrowser({ activeFile, onSelect, files, folders, fold
           <FontAwesomeIcon icon={faPlay} />
           <span>animation.mp4</span>
         </span>
-      </div>
+      </div> */}
       <div
         className={`${styles.projectFiles} ${dropTarget === "root" ? styles.dropTarget : ""}`}
         onDragOver={(event) => {
