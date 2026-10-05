@@ -373,9 +373,19 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  overflow: hidden;
   padding-right: 0.8125rem;
   color: var(--color-gray-20);
   user-select: none;
+}
+
+.lineNumberRow {
+  display: block;
+}
+
+.wrappedLine {
+  display: block;
+  height: 1.45em;
 }
 
 .textarea {
@@ -399,10 +409,23 @@
   caret-color: var(--color-gray-00);
 }
 
+.lineMeasure {
+  position: absolute;
+  width: 100%;
+  padding-right: 0.8125rem;
+  visibility: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.lineMeasure > div {
+  min-height: 1.45em;
+}
+
 .highlightedCode {
   position: absolute;
   inset: 0;
-  overflow: auto;
+  overflow: hidden;
   margin: 0;
   padding: 0 0.8125rem 1rem 0;
   color: var(--color-gray-00);

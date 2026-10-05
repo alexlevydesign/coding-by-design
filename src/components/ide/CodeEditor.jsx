@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpRightAndDownLeftFromCenter } from "@fortawesome/free-solid-svg-icons";
 import styles from "./IdeShell.module.css";
@@ -62,10 +62,36 @@ export default function CodeEditor({
   onReorder,
   onExpand,
 }) {
-  const lineCount = Math.max(value.split("\n").length, 1);
+  const sourceLines = value.split("\n");
   const language = activeFile.endsWith(".css") ? "css" : activeFile.endsWith(".html") ? "html" : null;
   const [draggedTab, setDraggedTab] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
+  const [visualLineCounts, setVisualLineCounts] = useState(() => sourceLines.map(() => 1));
+  const viewportRef = useRef(null);
+
+  useLayoutEffect(() => {
+    function measureWrappedLines() {
+      const measure = viewportRef.current?.querySelector("[data-line-measure]");
+
+      if (!measure) {
+        return;
+      }
+
+      const lineHeight = parseFloat(getComputedStyle(measure).lineHeight);
+      const nextCounts = Array.from(measure.children, (line) => Math.max(1, Math.round(line.getBoundingClientRect().height / lineHeight)));
+      setVisualLineCounts(nextCounts);
+    }
+
+    measureWrappedLines();
+    const observer = new ResizeObserver(measureWrappedLines);
+    const viewport = viewportRef.current;
+
+    if (viewport) {
+      observer.observe(viewport);
+    }
+
+    return () => observer.disconnect();
+  }, [value]);
 
   function handleDragOver(event, targetTab) {
     event.preventDefault();
@@ -135,9 +161,19 @@ export default function CodeEditor({
       </div>
       <div className={styles.editorBody}>
         <div className={`type-code ${styles.lineNumbers}`} aria-hidden="true">
-          {Array.from({ length: lineCount }, (_, index) => <span key={index}>{index + 1}</span>)}
+          {sourceLines.map((line, index) => (
+            <span className={styles.lineNumberRow} key={index}>
+              {index + 1}
+              {Array.from({ length: (visualLineCounts[index] || 1) - 1 }, (_, wrapIndex) => (
+                <span className={styles.wrappedLine} key={wrapIndex} />
+              ))}
+            </span>
+          ))}
         </div>
-        <div className={styles.codeViewport}>
+        <div className={styles.codeViewport} ref={viewportRef}>
+          <div className={`type-code ${styles.lineMeasure}`} data-line-measure aria-hidden="true">
+            {sourceLines.map((line, index) => <div key={index}>{line || " "}</div>)}
+          </div>
           {language && (
             <pre className={`type-code ${styles.highlightedCode}`} aria-hidden="true">
               {tokenize(value, language).map((token, index) => (
@@ -153,10 +189,17 @@ export default function CodeEditor({
             value={value}
             onChange={(event) => onChange(event.target.value)}
             onScroll={(event) => {
-              const highlight = event.currentTarget.previousElementSibling;
+              const viewport = event.currentTarget.parentElement;
+              const highlight = viewport?.querySelector("pre");
+              const lineNumbers = viewport?.previousElementSibling;
+
               if (highlight) {
                 highlight.scrollTop = event.currentTarget.scrollTop;
                 highlight.scrollLeft = event.currentTarget.scrollLeft;
+              }
+
+              if (lineNumbers) {
+                lineNumbers.scrollTop = event.currentTarget.scrollTop;
               }
             }}
             wrap="soft"
