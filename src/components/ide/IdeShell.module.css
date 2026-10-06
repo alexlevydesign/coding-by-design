@@ -423,6 +423,11 @@
   caret-color: var(--color-gray-00);
 }
 
+.highlightedTextarea::selection {
+  color: var(--color-gray-00);
+  background: var(--color-purple-80);
+}
+
 .lineMeasure {
   position: absolute;
   width: 100%;
