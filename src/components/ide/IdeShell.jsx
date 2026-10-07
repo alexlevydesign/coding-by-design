@@ -5,11 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
   faBars,
+  faBook,
   faFile,
+  faList,
   faFolderPlus,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import FileBrowser from "./FileBrowser";
+import LessonsPanel from "./LessonsPanel";
 import CodeEditor from "./CodeEditor";
 import PreviewPanel from "./PreviewPanel";
 import styles from "./IdeShell.module.css";
@@ -27,6 +30,7 @@ export default function IdeShell() {
   const [tabs, setTabs] = useState(initialTabs);
   const [activeFile, setActiveFile] = useState("index.html");
   const [fileBrowserOpen, setFileBrowserOpen] = useState(true);
+  const [lessonsOpen, setLessonsOpen] = useState(false);
   const [expandedPanel, setExpandedPanel] = useState(null);
   const [folders, setFolders] = useState([]);
   const [folderFiles, setFolderFiles] = useState({});
@@ -73,6 +77,8 @@ export default function IdeShell() {
     () => `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>${files["style.css"]}</style></head><body>${previewHtml}</body></html>`,
     [files, previewHtml],
   );
+
+  const panelSwitchIcon = lessonsOpen ? faFile : faBook;
 
   function updateFile(value) {
     setFiles((currentFiles) => ({ ...currentFiles, [activeFile]: value }));
@@ -158,7 +164,7 @@ export default function IdeShell() {
           className={`${styles.editorPanel} ${!fileBrowserOpen ? styles.fileBrowserClosed : ""}`}
           aria-label="Code editor"
         >
-          <div className={styles.editorToolbar}>
+          <div className={`${styles.editorToolbar} ${lessonsOpen ? styles.lessonsToolbar : styles.filesToolbar}`}>
             <button
               className={styles.iconButton}
               type="button"
@@ -168,15 +174,26 @@ export default function IdeShell() {
             >
               <FontAwesomeIcon icon={faBars} />
             </button>
-            <span className={`type-body-bold ${styles.panelTitle}`}>Files</span>
+            <span className={`type-body-bold ${styles.panelTitle}`}>{lessonsOpen ? "Lessons" : "Files"}</span>
+            {lessonsOpen && <FontAwesomeIcon className={styles.lessonListIcon} icon={faList} aria-hidden="true" />}
+            {!lessonsOpen && (
+              <button
+                className={`${styles.iconButton} ${styles.addButton}`}
+                type="button"
+                aria-label="Add file"
+                aria-expanded={isAddMenuOpen}
+                onClick={() => setIsAddMenuOpen((isOpen) => !isOpen)}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
+            )}
             <button
-              className={`${styles.iconButton} ${styles.addButton}`}
+              className={`${styles.iconButton} ${styles.panelSwitchButton}`}
               type="button"
-              aria-label="Add file"
-              aria-expanded={isAddMenuOpen}
-              onClick={() => setIsAddMenuOpen((isOpen) => !isOpen)}
+              aria-label={lessonsOpen ? "Show files" : "Open lessons"}
+              onClick={() => setLessonsOpen((isOpen) => !isOpen)}
             >
-              <FontAwesomeIcon icon={faPlus} />
+              <FontAwesomeIcon icon={panelSwitchIcon} />
             </button>
             {isAddMenuOpen && (
               <div className={styles.addMenu} role="menu" aria-label="Create or upload">
@@ -202,14 +219,18 @@ export default function IdeShell() {
               </div>
             )}
           </div>
-          <FileBrowser
-            activeFile={activeFile}
-            onSelect={setActiveFile}
-            files={Object.keys(files)}
-            folders={folders}
-            folderFiles={folderFiles}
-            onMoveFile={moveFileToFolder}
-          />
+          {lessonsOpen ? (
+            <LessonsPanel onShowFiles={() => setLessonsOpen(false)} />
+          ) : (
+            <FileBrowser
+              activeFile={activeFile}
+              onSelect={setActiveFile}
+              files={Object.keys(files)}
+              folders={folders}
+              folderFiles={folderFiles}
+              onMoveFile={moveFileToFolder}
+            />
+          )}
           <CodeEditor
             activeFile={activeFile}
             value={files[activeFile]}

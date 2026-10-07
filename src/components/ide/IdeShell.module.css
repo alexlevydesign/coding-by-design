@@ -76,7 +76,7 @@
 .editorPanel {
   display: grid;
   position: relative;
-  grid-template-columns: 16rem minmax(0, 1fr);
+  grid-template-columns: 20rem minmax(0, 1fr);
   grid-template-rows: 2.0625rem minmax(0, 1fr);
   background: var(--color-gray-100);
 }
@@ -94,12 +94,17 @@
 }
 
 .panelTitle,
-.addButton {
+.addButton,
+.panelSwitchButton,
+.lessonListIcon {
   transition: opacity 250ms cubic-bezier(0.8, 0.05, 0.5, 1), transform 250ms cubic-bezier(0.8, 0.05, 0.5, 1), visibility 0s linear;
 }
 
 .fileBrowserClosed .panelTitle,
-.fileBrowserClosed .addButton {
+.fileBrowserClosed .addButton,
+.fileBrowserClosed .panelSwitchButton,
+.fileBrowserClosed .lessonListIcon,
+.fileBrowserClosed .addMenu {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -134,6 +139,7 @@
   border-bottom: 0.0625rem solid var(--color-gray-80);
   background: var(--color-gray-100);
   transition: width 250ms cubic-bezier(0.8, 0.05, 0.5, 1), gap 250ms cubic-bezier(0.8, 0.05, 0.5, 1);
+  padding-right: 1rem;
 }
 
 .editorToolbar > .iconButton:first-child {
@@ -172,9 +178,6 @@
 .addButton {
   margin-left: auto;
   margin-right: 0.3125rem;
-}
-.addButton:hover {
-    /* background-color: var(--color-gray-90); */
 }
 
 .addMenu {
@@ -230,6 +233,99 @@
   border-right: 0.0625rem solid var(--color-gray-80);
   background: var(--color-gray-100);
   color: var(--color-gray-20);
+}
+
+.sidebarToolbar {
+  display: flex;
+  align-items: center;
+  min-height: 2.0625rem;
+  margin: -1.5625rem -0.8125rem 1.5625rem;
+  padding: 0 0.8125rem;
+  border-bottom: 0.0625rem solid var(--color-gray-80);
+}
+
+.sidebarTitle {
+  color: var(--color-gray-00);
+}
+
+.sidebarIconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2.0625rem;
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: var(--color-gray-00);
+  cursor: pointer;
+  font: inherit;
+}
+
+.sidebarIconButton:hover,
+.sidebarIconButton:focus-visible {
+  color: var(--color-purple-60);
+  outline: 0;
+}
+
+.lessonsPanel {
+  overflow-y: auto;
+}
+
+.lessonListIcon {
+  margin-left: auto;
+  color: var(--color-gray-00);
+}
+
+.lessonContent {
+  padding-bottom: 2rem;
+  color: var(--color-gray-00);
+}
+
+.lessonHeading {
+  margin-bottom: 2rem;
+  color: var(--color-gray-00);
+}
+
+.lessonSection {
+  margin-bottom: 2rem;
+}
+
+.lessonSectionHeading {
+  margin-bottom: 0.75rem;
+  color: var(--color-gray-00);
+}
+
+.lessonElement {
+  color: var(--color-gray-20);
+  font-family: var(--font-code);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.lessonCode {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  overflow-x: auto;
+  border-radius: 0.25rem;
+  background: var(--color-gray-90);
+  color: var(--color-gray-00);
+  white-space: pre-wrap;
+}
+
+.lessonCodeLine {
+  display: block;
+}
+
+.lessonLineNumber {
+  display: inline-block;
+  width: 2rem;
+  color: var(--color-gray-20);
+  text-align: right;
+}
+
+.lessonTag {
+  color: var(--color-purple-60);
 }
 
 .folder,
