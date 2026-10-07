@@ -74,7 +74,10 @@ export default function IdeShell() {
     : files["index.html"];
 
   const previewDocument = useMemo(
-    () => `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>${files["style.css"]}</style></head><body>${previewHtml}</body></html>`,
+    () => `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>${files["style.css"]}
+  html, body { scrollbar-width: none; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+</style></head><body>${previewHtml}</body></html>`,
     [files, previewHtml],
   );
 
