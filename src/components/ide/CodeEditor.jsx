@@ -198,9 +198,12 @@ export default function CodeEditor({
   const [draggedTab, setDraggedTab] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
   const [completion, setCompletion] = useState(null);
+  const [editorScrollTop, setEditorScrollTop] = useState(0);
+  const [completionPosition, setCompletionPosition] = useState(null);
   const [visualLineCounts, setVisualLineCounts] = useState(() => sourceLines.map(() => 1));
   const viewportRef = useRef(null);
   const textareaRef = useRef(null);
+  const completionMenuRef = useRef(null);
 
   function updateCompletion(nextValue, cursor, force = false) {
     const context = getCompletionContext(nextValue, cursor, language);
@@ -282,6 +285,58 @@ export default function CodeEditor({
 
     return () => observer.disconnect();
   }, [value]);
+
+  useLayoutEffect(() => {
+    if (!completion) {
+      return;
+    }
+
+    const measuredLines = viewportRef.current?.querySelector("[data-line-measure]")?.children;
+    const line = measuredLines?.[completion.lineNumber];
+
+    if (!line) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      setCompletionPosition({
+        top: line.offsetTop + line.offsetHeight - editorScrollTop,
+        left: completion.column,
+        lineTop: line.offsetTop - editorScrollTop,
+        lineBottom: line.offsetTop + line.offsetHeight - editorScrollTop,
+        placement: "below",
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [completion, editorScrollTop, value]);
+
+  useLayoutEffect(() => {
+    if (!completionPosition || !completionMenuRef.current || !viewportRef.current) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      const menuHeight = completionMenuRef.current?.offsetHeight || 0;
+      const viewportHeight = viewportRef.current?.clientHeight || 0;
+      const shouldPlaceAbove = completionPosition.lineBottom + menuHeight > viewportHeight
+        && completionPosition.lineTop - menuHeight >= 0;
+      const nextTop = shouldPlaceAbove
+        ? completionPosition.lineTop - menuHeight
+        : completionPosition.lineBottom;
+      const nextPlacement = shouldPlaceAbove ? "above" : "below";
+
+      setCompletionPosition((current) => {
+        if (!current || current.top === nextTop && current.placement === nextPlacement) {
+          return current;
+        }
+
+        return { ...current, top: nextTop, placement: nextPlacement };
+      });
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [completionPosition]);
 
   function handleDragOver(event, targetTab) {
     event.preventDefault();
@@ -422,6 +477,7 @@ export default function CodeEditor({
               const viewport = event.currentTarget.parentElement;
               const highlight = viewport?.querySelector("pre");
               const lineNumbers = viewport?.previousElementSibling;
+              setEditorScrollTop(event.currentTarget.scrollTop);
 
               if (highlight) {
                 highlight.scrollTop = event.currentTarget.scrollTop;
@@ -436,12 +492,16 @@ export default function CodeEditor({
             spellCheck="false"
             aria-label={`Edit ${activeFile}`}
           />
-          {completion && (
+          {completion && completionPosition && (
             <div
+              ref={completionMenuRef}
               className={styles.completionMenu}
               role="listbox"
               aria-label={`${completion.kind} completions`}
-              style={{ "--completion-top": `${completion.lineNumber * 1.45}em`, "--completion-left": `${completion.column}ch` }}
+              style={{
+                "--completion-top": `${completionPosition.top}px`,
+                "--completion-left": `${completionPosition.left}ch`,
+              }}
             >
               {completion.items.map((item, index) => (
                 <button

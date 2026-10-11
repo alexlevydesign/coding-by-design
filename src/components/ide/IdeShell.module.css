@@ -508,7 +508,7 @@
 
 .completionMenu {
   position: absolute;
-  top: calc(var(--completion-top) + 1.45em);
+  top: var(--completion-top);
   left: var(--completion-left);
   z-index: 4;
   display: flex;
